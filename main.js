@@ -10,12 +10,8 @@ app.get('/', function (request, response) {
   var _url = request.url;
   var title = request.query.id;
   var queryData = url.parse(_url, true).query;
+  var pathname = url.parse(_url, true).pathname; //없는 경로에 접근했을때 예외처리
 
-  if(_url == '/favicon.ico'){
-    return response.writeHead(404);
-  }
-
-  response.writeHead(200);
   fs.readFile(`data/${title}`, 'utf8', function(err, description){
     fs.readFile(`data/${queryData.id}`,'utf8',function(err, description){
 
@@ -45,9 +41,18 @@ app.get('/', function (request, response) {
       </body>
       </html>
       `;
+      response.writeHead(200);
       response.end(template);
-    } )
+    } );
 
-  })
+  });
+
 });
+//없는 경로로 접근할때 예외처리
+app.get('*', function (request, response) {
+  response.writeHead(404, {'Content-Type': 'text/html; charset=utf-8'});
+  response.end('잘못된 접근입니다.');
+
+});
+
 app.listen(3000);
