@@ -1,9 +1,8 @@
-var http = require('http');
+//var http = require('http');
 var fs = require('fs');
 var url = require('url');
 var express = require('express');
 var app = express();
-
 
 app.get('/', function (request, response) {
   app.use(express.static('./data')); //현재경로
@@ -11,9 +10,6 @@ app.get('/', function (request, response) {
   var _url = request.url;
   var title = request.query.id;
   var queryData = url.parse(_url, true).query;
-
-
-
 
   if(_url == '/favicon.ico'){
     return response.writeHead(404);
@@ -25,9 +21,7 @@ app.get('/', function (request, response) {
 
       if(_url == '/'){
         title = 'Welcome';
-        fs.readFile(`data/index`,'utf8',function(err, description2){
-          var description = description2;
-        })
+        description = fs.readFileSync(`data/index`,'utf-8');
       }else {
         var description = description;
       }
